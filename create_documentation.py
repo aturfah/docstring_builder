@@ -29,9 +29,9 @@ def parse_folder(folder_name):
 
     files = [file_ for file_ in listdir(folder_name) if (".py" in file_)]
 
-    # print("\n\nBASE: {}".format(folder_name))
-    # print("\tFOLDERS: {}".format(folders))
-    # print("\tFILES: {}".format(files))
+    print("\n\nBASE: {}".format(folder_name))
+    print("\tFOLDERS: {}".format(folders))
+    print("\tFILES: {}".format(files))
 
     for file_name in files:
         output[file_name] = parse_file(join(folder_name, file_name))
@@ -56,7 +56,7 @@ def parse_file(file_name):
         Dictionary with the information of the docstrings in the file.
 
     """
-    # print("\nPARSING_FILE: {}".format(file_name))
+    print("\nPARSING_FILE: {}".format(file_name))
     with open(file_name) as file_:
         code = ast.parse(file_.read())
     output = parse_module(code)
@@ -104,7 +104,7 @@ def parse_class(class_node):
         Dictionary with the documentation info for this node.
 
     """
-    # print("CLASS")
+    print("CLASS: {}".format(class_node.name))
 
     output = {}
     output["name"] = class_node.name
@@ -130,7 +130,7 @@ def parse_func(func_node):
         Dictionary with the documentation info for this node.
 
     """
-    # print("FUNCTION")
+    print("FUNCTION: {}".format(func_node.name))
 
     output = {}
     output["name"] = func_node.name
@@ -147,8 +147,8 @@ def create_documentation():
     # Get the documentation for this (and all sub) directories
     file_info = parse_folder(current_dir)
 
-    print(file_info)
-    print(file_info.keys())
+    # print(file_info)
+    # print(file_info.keys())
 
     raise RuntimeError("DOOT PARSE FOLDERS")
 
