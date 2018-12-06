@@ -14,7 +14,7 @@ def parse_module(module_node):
     
     # Get Module docstring
     output["type"] = "module"
-    output["docstring"] = repr(ast.get_docstring(module_node))
+    output["docstring"] = ast.get_docstring(module_node)
     output["class_children"] = []
     output["func_children"] = []
 
@@ -32,12 +32,15 @@ def parse_class(class_node):
     output = {}
     output["name"] = class_node.name
     output["type"] = "class"
-    output["docstring"] = repr(ast.get_docstring(class_node))
+    output["docstring"] = ast.get_docstring(class_node)
     output["func_children"] = []
 
     for child_node in ast.iter_child_nodes(class_node):
         if isinstance(child_node, ast.FunctionDef):
             output["func_children"].append(parse_func(child_node))
+
+    print(output)
+    raise RuntimeError("DOOT")
 
     return output
 
@@ -48,7 +51,7 @@ def parse_func(func_node):
     output = {}
     output["name"] = func_node.name
     output["type"] = "func"
-    output["docstring"] = repr(ast.get_docstring(func_node))
+    output["docstring"] = ast.get_docstring(func_node)
 
     return output
 
