@@ -33,17 +33,19 @@ def parse_folder(folder_name):
     output = {}
 
     # Get list of folders to build documentation for
-    folders = [file_ for file_ in listdir(folder_name) if not isfile(file_)]
+    folders = [file_ for file_ in listdir(folder_name) if not (isfile(file_) or ".py" in file_)]
     folders = [file_ for file_ in folders if file_ not in IGNORE_FOLDERS]
 
-    files = [file_ for file_ in listdir(folder_name) if isfile(file_)]
+    files = [file_ for file_ in listdir(folder_name) if (isfile(file_) or ".py" in file_)]
 
-    print(folders)
-    print(files)
+    print("\n\nBASE: {}".format(folder_name))
+    print("\tFOLDERS: {}".format(folders))
+    print("\tFILES: {}".format(files))
 
-    raise RuntimeError("DOOT PARSE FOLDERS")
+    for sub_name in folders:
+        output[sub_name] = parse_folder(join(folder_name, sub_name))
+
     return output
-
 
 
 def create_documentation():
@@ -52,6 +54,9 @@ def create_documentation():
 
     # Get the documentation for this (and all sub) directories
     file_info = parse_folder(current_dir)
+
+    print(file_info)
+    raise RuntimeError("DOOT PARSE FOLDERS")
 
 
 if __name__ == "__main__":
