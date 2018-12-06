@@ -112,6 +112,7 @@ def parse_folder(folder_name):
 
     """
     output = {}
+    output["type"] = "folder"
 
     # Get list of folders to build documentation for
     folders = [file_ for file_ in listdir(folder_name) if not (isfile(file_) or ".py" in file_)]
@@ -143,6 +144,7 @@ def create_documentation():
     file_info = parse_folder(current_dir)
 
     print(file_info)
+
     raise RuntimeError("DOOT PARSE FOLDERS")
 
 
