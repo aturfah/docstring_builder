@@ -6,18 +6,18 @@ from os.path import join, isfile, dirname, realpath
 IGNORE_FOLDERS = ["__pycache__", "ignore_dir", ".git"]
 
 
-def get_folders(base_dir=""):
+def parse_file(file_name):
     """
-    Get folders and associated files from the directory.
+    Get the documentation of the python file.
 
     Args:
-        base_dir (str): Directory to look at files in.
+        file_name (str): File name to parse.
 
     Returns:
-        FILL ME IN LATER
+        FILL ME IN LATER.
 
     """
-    raise RuntimeError("DOOT: GET FOLDERS")
+    print("\nPARSING_FILE: {}".format(file_name))
 
 
 def parse_folder(folder_name):
@@ -29,6 +29,7 @@ def parse_folder(folder_name):
     
     Returns:
         FILL ME IN LATER.
+
     """
     output = {}
 
@@ -36,14 +37,20 @@ def parse_folder(folder_name):
     folders = [file_ for file_ in listdir(folder_name) if not (isfile(file_) or ".py" in file_)]
     folders = [file_ for file_ in folders if file_ not in IGNORE_FOLDERS]
 
-    files = [file_ for file_ in listdir(folder_name) if (isfile(file_) or ".py" in file_)]
+    files = [file_ for file_ in listdir(folder_name) if (".py" in file_)]
 
     print("\n\nBASE: {}".format(folder_name))
     print("\tFOLDERS: {}".format(folders))
     print("\tFILES: {}".format(files))
 
+    for file_name in files:
+        output[file_name] = parse_file(join(folder_name, file_name))
+
     for sub_name in folders:
         output[sub_name] = parse_folder(join(folder_name, sub_name))
+
+    output["_folders"] = folders
+    output["_files"] = files
 
     return output
 
