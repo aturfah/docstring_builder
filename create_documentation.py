@@ -1,5 +1,7 @@
 """Script to create README files for a set of folders."""
 
+import ast
+
 from os import listdir
 from os.path import join, isfile, dirname, realpath
 
@@ -18,6 +20,14 @@ def parse_file(file_name):
 
     """
     print("\nPARSING_FILE: {}".format(file_name))
+    with open(file_name) as file_:
+        code = ast.parse(file_.read())
+
+    for node in ast.walk(code):
+        if isinstance(node, (ast.FunctionDef, ast.ClassDef, ast.Module)):
+            docstring = ast.get_docstring(node)
+            if docstring:
+                print(repr(docstring))
 
 
 def parse_folder(folder_name):
