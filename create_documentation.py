@@ -9,9 +9,19 @@ IGNORE_FOLDERS = ["__pycache__", "ignore_dir", ".git"]
 
 
 def parse_module(module_node):
-    """Parse Module level node."""
+    """
+    Parse Module level node.
+
+    Args:
+        module_node (_ast.Module): AST Node for this module.
+
+    Returns:
+        Dictionary with the documentation info for this node.
+
+    """
     output = {}
-    
+    print(type(module_node))
+
     # Get Module docstring
     output["type"] = "module"
     output["docstring"] = ast.get_docstring(module_node)
@@ -27,7 +37,16 @@ def parse_module(module_node):
     return output
 
 def parse_class(class_node):
-    """Parse Module level node."""
+    """
+    Parse Class level node.
+
+    Args:
+        module_node (_ast.Module): AST Node for this class.
+
+    Returns:
+        Dictionary with the documentation info for this node.
+
+    """
     print("CLASS")
     output = {}
     output["name"] = class_node.name
@@ -39,14 +58,20 @@ def parse_class(class_node):
         if isinstance(child_node, ast.FunctionDef):
             output["func_children"].append(parse_func(child_node))
 
-    print(output)
-    raise RuntimeError("DOOT")
-
     return output
 
 
 def parse_func(func_node):
-    """Parse Module level node."""
+    """
+    Parse Function level node.
+
+    Args:
+        module_node (_ast.Module): AST Node for this Function
+
+    Returns:
+        Dictionary with the documentation info for this node.
+
+    """
     print("FUNCTION")
     output = {}
     output["name"] = func_node.name
@@ -64,7 +89,7 @@ def parse_file(file_name):
         file_name (str): File name to parse.
 
     Returns:
-        FILL ME IN LATER.
+        Dictionary with the information of the docstrings in the file.
 
     """
     print("\nPARSING_FILE: {}".format(file_name))
@@ -82,7 +107,7 @@ def parse_folder(folder_name):
         folder_name (str): Directory to parse.
     
     Returns:
-        FILL ME IN LATER.
+        Dictionary with the docstring information for all files in that folder.
 
     """
     output = {}
