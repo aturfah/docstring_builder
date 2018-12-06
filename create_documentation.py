@@ -32,17 +32,25 @@ def parse_class(class_node):
     output = {}
     output["name"] = class_node.name
     output["type"] = "class"
+    output["docstring"] = repr(ast.get_docstring(class_node))
+    output["func_children"] = []
+
+    for child_node in ast.iter_child_nodes(class_node):
+        if isinstance(child_node, ast.FunctionDef):
+            output["func_children"].append(parse_func(child_node))
 
     return output
 
 
 def parse_func(func_node):
     """Parse Module level node."""
+    print("FUNCTION")
     output = {}
     output["name"] = func_node.name
     output["type"] = "func"
+    output["docstring"] = repr(ast.get_docstring(func_node))
 
-    return {}
+    return output
 
 
 def parse_file(file_name):
