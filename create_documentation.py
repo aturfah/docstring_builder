@@ -5,7 +5,7 @@ import ast
 from os import listdir
 from os.path import join, isfile, dirname, realpath
 
-IGNORE_FOLDERS = ["__pycache__", "ignore_dir", ".git"]
+IGNORE_FOLDERS = ["__pycache__", "ignore_dir", ".git", "env"]
 
 
 def parse_module(module_node):
@@ -20,7 +20,6 @@ def parse_module(module_node):
 
     """
     output = {}
-    print(type(module_node))
 
     # Get Module docstring
     output["type"] = "module"
@@ -41,13 +40,14 @@ def parse_class(class_node):
     Parse Class level node.
 
     Args:
-        module_node (_ast.Module): AST Node for this class.
+        module_node (_ast.ClassDef): AST Node for this class.
 
     Returns:
         Dictionary with the documentation info for this node.
 
     """
     print("CLASS")
+
     output = {}
     output["name"] = class_node.name
     output["type"] = "class"
@@ -66,13 +66,14 @@ def parse_func(func_node):
     Parse Function level node.
 
     Args:
-        module_node (_ast.Module): AST Node for this Function
+        module_node (_ast.FunctionDef): AST Node for this Function
 
     Returns:
         Dictionary with the documentation info for this node.
 
     """
     print("FUNCTION")
+
     output = {}
     output["name"] = func_node.name
     output["type"] = "func"
