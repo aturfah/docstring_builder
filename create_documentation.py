@@ -20,7 +20,7 @@ def get_folders(base_dir=""):
     raise RuntimeError("DOOT: GET FOLDERS")
 
 
-def parse_folders(folder_name):
+def parse_folder(folder_name):
     """
     Build documentation for the folder.
 
@@ -30,19 +30,28 @@ def parse_folders(folder_name):
     Returns:
         FILL ME IN LATER.
     """
+    output = {}
+
+    # Get list of folders to build documentation for
+    folders = [file_ for file_ in listdir(folder_name) if not isfile(file_)]
+    folders = [file_ for file_ in folders if file_ not in IGNORE_FOLDERS]
+
+    files = [file_ for file_ in listdir(folder_name) if isfile(file_)]
+
+    print(folders)
+    print(files)
+
     raise RuntimeError("DOOT PARSE FOLDERS")
+    return output
+
 
 
 def create_documentation():
     """Function to create documentation."""
     current_dir = dirname(realpath(__file__))
 
-    # Get list of folders to build documentation for
-    folders = [file_ for file_ in listdir(current_dir) if not isfile(file_)]
-    folders = [file_ for file_ in folders if file_ not in IGNORE_FOLDERS]
-
-    print(folders)
-    print(files)
+    # Get the documentation for this (and all sub) directories
+    file_info = parse_folder(current_dir)
 
 
 if __name__ == "__main__":
