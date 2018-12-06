@@ -1,9 +1,9 @@
 """Script to create README files for a set of folders."""
 
-from os import walk
-from os.path import join
+from os import listdir
+from os.path import join, isfile, dirname, realpath
 
-IGNORE_FOLDERS = ["__pycache__", "ignore_dir"]
+IGNORE_FOLDERS = ["__pycache__", "ignore_dir", ".git"]
 
 
 def get_folders(base_dir=""):
@@ -35,10 +35,14 @@ def parse_folders(folder_name):
 
 def create_documentation():
     """Function to create documentation."""
-    f = []
-    for (dirpath, dirnames, filenames) in walk(mypath):
-        f.extend(filenames)
-        break
+    current_dir = dirname(realpath(__file__))
+
+    # Get list of folders to build documentation for
+    folders = [file_ for file_ in listdir(current_dir) if not isfile(file_)]
+    folders = [file_ for file_ in folders if file_ not in IGNORE_FOLDERS]
+
+    print(folders)
+    print(files)
 
 
 if __name__ == "__main__":
