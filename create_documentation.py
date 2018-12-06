@@ -8,6 +8,32 @@ from os.path import join, isfile, dirname, realpath
 IGNORE_FOLDERS = ["__pycache__", "ignore_dir", ".git"]
 
 
+def parse_module(module_node):
+    """Parse Module level node."""
+    output = {}
+    
+    # Get Module docstring
+    output["type"] = "module"
+    output["docstring"] = repr(ast.get_docstring(module_node))
+    output["children"] = []
+
+    for child_node in ast.iter_child_nodes(module_node):
+        if isinstance(child_node, ast.ClassDef):
+            output["children"].append(parse_class(child_node))
+        elif isinstance(child_node, ast.FunctionDef):
+            output["children"].append(parse_func(child_node))
+
+
+def parse_class(class_node):
+    """Parse Module level node."""
+    pass
+
+
+def parse_func(func_node):
+    """Parse Module level node."""
+    pass
+
+
 def parse_file(file_name):
     """
     Get the documentation of the python file.
@@ -23,11 +49,7 @@ def parse_file(file_name):
     with open(file_name) as file_:
         code = ast.parse(file_.read())
 
-    for node in ast.walk(code):
-        if isinstance(node, (ast.FunctionDef, ast.ClassDef, ast.Module)):
-            docstring = ast.get_docstring(node)
-            if docstring:
-                print(repr(docstring))
+    return parse_module(code)
 
 
 def parse_folder(folder_name):
