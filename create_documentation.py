@@ -20,6 +20,19 @@ def get_folders(base_dir=""):
     raise RuntimeError("DOOT: GET FOLDERS")
 
 
+def parse_folders(folder_name):
+    """
+    Build documentation for the folder.
+
+    Args:
+        folder_name (str): Directory to parse.
+    
+    Returns:
+        FILL ME IN LATER.
+    """
+    raise RuntimeError("DOOT PARSE FOLDERS")
+
+
 def create_documentation():
     """Function to create documentation."""
     f = []
