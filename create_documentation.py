@@ -140,17 +140,29 @@ def parse_func(func_node):
     return output
 
 
+def build_files(file_info):
+    """
+    Actually build the documentation.
+    
+    Args:
+        file_info (dict): All the directory info from earlier steps.
+
+    """
+    print(file_info)
+    print(file_info.keys())
+
+    print(file_info["name"], file_info["type"], file_info["_folders"], file_info["_files"])
+
+    raise RuntimeError("DOOT PARSE FOLDERS")
+
+
 def create_documentation():
     """Function to create documentation."""
     current_dir = dirname(realpath(__file__))
 
     # Get the documentation for this (and all sub) directories
     file_info = parse_folder(current_dir)
-
-    # print(file_info)
-    # print(file_info.keys())
-
-    raise RuntimeError("DOOT PARSE FOLDERS")
+    build_files(file_info)
 
 
 if __name__ == "__main__":
