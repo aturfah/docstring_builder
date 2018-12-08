@@ -31,9 +31,9 @@ def parse_folder(folder_name):
 
     files = [file_ for file_ in listdir(folder_name) if (".py" in file_)]
 
-    print("\n\nBASE: {}".format(folder_name))
-    print("\tFOLDERS: {}".format(folders))
-    print("\tFILES: {}".format(files))
+    # print("\n\nBASE: {}".format(folder_name))
+    # print("\tFOLDERS: {}".format(folders))
+    # print("\tFILES: {}".format(files))
 
     for file_name in files:
         output[file_name] = parse_file(join(folder_name, file_name))
@@ -58,7 +58,7 @@ def parse_file(file_name):
         Dictionary with the information of the docstrings in the file.
 
     """
-    print("\nPARSING_FILE: {}".format(file_name))
+    # print("\nPARSING_FILE: {}".format(file_name))
     with open(file_name) as file_:
         code = ast.parse(file_.read())
     output = parse_module(code)
@@ -106,7 +106,7 @@ def parse_class(class_node):
         Dictionary with the documentation info for this node.
 
     """
-    print("CLASS: {}".format(class_node.name))
+    # print("CLASS: {}".format(class_node.name))
 
     output = {}
     output["name"] = class_node.name
@@ -132,7 +132,7 @@ def parse_func(func_node):
         Dictionary with the documentation info for this node.
 
     """
-    print("FUNCTION: {}".format(func_node.name))
+    # print("FUNCTION: {}".format(func_node.name))
 
     output = {}
     output["name"] = func_node.name
@@ -150,17 +150,11 @@ def build_files(file_info):
         file_info (dict): All the directory info from earlier steps.
 
     """
-    # print(file_info)
-    # print(file_info.keys())
-
     output_str = ""
-
-    print(file_info["name"], file_info["type"], file_info["_folders"], file_info["_files"])
 
     for file_name in file_info["_files"]:
         # Document files in the folder
         datum = file_info[file_name]
-        print(datum)
 
         output_str = "{}# {}: {}\n".format(output_str, datum["type"] , file_name)
         if datum["docstring"]:
@@ -182,8 +176,6 @@ def build_docs_func(func_info):
         func_info (dict): Information about this function.
 
     """
-    print("\n")
-    print(func_info)
     out_str = "## Function: {}\n".format(func_info["name"])
 
     if func_info.get("docstring") and func_info["docstring"]:
@@ -192,6 +184,7 @@ def build_docs_func(func_info):
 
         out_str = "{}{}\n".format(out_str, func_doc_arr[0])
 
+        # TODO: Use napoleon aliases for this
         arg_str = [docstr for docstr in func_doc_arr if docstr.startswith("Args:")]
         ret_str = [docstr for docstr in func_doc_arr if docstr.startswith("Returns:")]
         exc_str = [docstr for docstr in func_doc_arr if docstr.startswith("Raises:")]
@@ -202,8 +195,6 @@ def build_docs_func(func_info):
             args = [val.strip() for val in arg_str.split("\n")[1:]]
             for arg in args:
                 name, type_, descr = re.search("(.+) \((.+)\): (.+)", arg).groups()
-                print(arg)
-                print(name, type_, descr)
                 out_str = "{out_str}- {name}\n  - Type: {type}\n  - {descr}\n".format(
                     out_str=out_str,
                     name=name,
@@ -219,6 +210,8 @@ def build_docs_func(func_info):
             out_str = "{}{}\n".format(out_str, ret_str)
         else:
             out_str = "{}_None_\n".format(out_str)
+
+        # TODO: Add exceptions
 
     out_str = "{}\n".format(out_str)
     return out_str
