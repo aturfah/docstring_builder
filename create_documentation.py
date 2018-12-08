@@ -194,6 +194,7 @@ def build_docs_func(func_info):
             arg_str = arg_str[0]
             args = [val.strip() for val in arg_str.split("\n")[1:]]
             for arg in args:
+                # TODO: Handle multiline docstrings
                 name, type_, descr = re.search("(.+) \((.+)\): (.+)", arg).groups()
                 out_str = "{out_str}- {name}\n  - Type: {type}\n  - {descr}\n".format(
                     out_str=out_str,
