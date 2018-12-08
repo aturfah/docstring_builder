@@ -8,6 +8,7 @@ from os.path import join, isfile, dirname, realpath
 IGNORE_FOLDERS = ["__pycache__", "ignore_dir", ".git", "env", ".vscode"]
 
 
+
 def parse_folder(folder_name):
     """
     Build documentation for the folder.
@@ -173,13 +174,36 @@ def build_files(file_info):
 
 
 def build_docs_func(func_info):
-    """Build documentation for a function."""
+    """
+    Build documentation for a function.
+    
+    Args:
+        func_info (dict): Information about this function.
+
+    """
+    print("\n")
     print(func_info)
     out_str = "## Function: {}\n".format(func_info["name"])
 
+    if func_info.get("docstring") and func_info["docstring"]:
+        func_doc_arr = func_info["docstring"].split("\n\n")
+        func_doc_arr = [val.strip() for val in func_doc_arr]
+
+        out_str = "{}{}\n".format(out_str, func_doc_arr[0])
+
+        arg_str = [docstr for docstr in func_doc_arr if docstr.startswith("Args")]
+        ret_str = [docstr for docstr in func_doc_arr if docstr.startswith("Returns")]
+        exc_str = [docstr for docstr in func_doc_arr if docstr.startswith("Raises")]
+
+        if arg_str:
+            arg_str = arg_str[0]
+            args = [val.strip() for val in arg_str.split("\n")[1:]]
+            print(args)
+            out_str = "{}### Arguments:\n".format(out_str)
 
     out_str = "{}\n".format(out_str)
     return out_str
+
 
 def create_documentation():
     """Function to create documentation."""
