@@ -5,7 +5,7 @@ import ast
 from os import listdir
 from os.path import join, isfile, dirname, realpath
 
-IGNORE_FOLDERS = ["__pycache__", "ignore_dir", ".git", "env"]
+IGNORE_FOLDERS = ["__pycache__", "ignore_dir", ".git", "env", ".vscode"]
 
 
 def parse_folder(folder_name):
@@ -148,13 +148,38 @@ def build_files(file_info):
         file_info (dict): All the directory info from earlier steps.
 
     """
-    print(file_info)
-    print(file_info.keys())
+    # print(file_info)
+    # print(file_info.keys())
+
+    output_str = ""
 
     print(file_info["name"], file_info["type"], file_info["_folders"], file_info["_files"])
 
+    for file_name in file_info["_files"]:
+        # Document files in the folder
+        datum = file_info[file_name]
+        print(datum)
+
+        output_str = "{}# {}: {}\n".format(output_str, datum["type"] , file_name)
+        if datum["docstring"]:
+            output_str = "{}{}\n".format(output_str, datum["docstring"])
+
+        for func_child in datum["func_children"]:
+            output_str = "{}{}".format(output_str, build_docs_func(func_child))
+
+    print(output_str)
+
     raise RuntimeError("DOOT PARSE FOLDERS")
 
+
+def build_docs_func(func_info):
+    """Build documentation for a function."""
+    print(func_info)
+    out_str = "## Function: {}\n".format(func_info["name"])
+
+
+    out_str = "{}\n".format(out_str)
+    return out_str
 
 def create_documentation():
     """Function to create documentation."""
