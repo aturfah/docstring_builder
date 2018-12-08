@@ -5,8 +5,9 @@ import ast
 from os import listdir
 from os.path import join, isfile, dirname, realpath
 
-IGNORE_FOLDERS = ["__pycache__", "ignore_dir", ".git", "env", ".vscode"]
+import re
 
+IGNORE_FOLDERS = ["__pycache__", "ignore_dir", ".git", "env", ".vscode"]
 
 
 def parse_folder(folder_name):
@@ -191,15 +192,33 @@ def build_docs_func(func_info):
 
         out_str = "{}{}\n".format(out_str, func_doc_arr[0])
 
-        arg_str = [docstr for docstr in func_doc_arr if docstr.startswith("Args")]
-        ret_str = [docstr for docstr in func_doc_arr if docstr.startswith("Returns")]
-        exc_str = [docstr for docstr in func_doc_arr if docstr.startswith("Raises")]
+        arg_str = [docstr for docstr in func_doc_arr if docstr.startswith("Args:")]
+        ret_str = [docstr for docstr in func_doc_arr if docstr.startswith("Returns:")]
+        exc_str = [docstr for docstr in func_doc_arr if docstr.startswith("Raises:")]
 
+        out_str = "{}#### Arguments:\n".format(out_str)
         if arg_str:
             arg_str = arg_str[0]
             args = [val.strip() for val in arg_str.split("\n")[1:]]
-            print(args)
-            out_str = "{}### Arguments:\n".format(out_str)
+            for arg in args:
+                name, type_, descr = re.search("(.+) \((.+)\): (.+)", arg).groups()
+                print(arg)
+                print(name, type_, descr)
+                out_str = "{out_str}- {name}\n  - Type: {type}\n  - {descr}\n".format(
+                    out_str=out_str,
+                    name=name,
+                    type=type_,
+                    descr=descr
+                )
+        else:
+            out_str = "{}_None_\n".format(out_str)
+
+        out_str = "{}#### Returns:\n".format(out_str)
+        if ret_str:
+            ret_str = ret_str[0].replace("Returns:\n","").strip()
+            out_str = "{}{}\n".format(out_str, ret_str)
+        else:
+            out_str = "{}_None_\n".format(out_str)
 
     out_str = "{}\n".format(out_str)
     return out_str
