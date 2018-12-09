@@ -9,6 +9,9 @@ import re
 
 IGNORE_FOLDERS = ["__pycache__", "ignore_dir", ".git", "env", ".vscode"]
 
+ARGUMENT_ALIASES = ["Args:"]
+RETURNS_ALIASES = ["Returns:"]
+EXCEPTION_ALIASES = ["Raises:"]
 
 def test_func(arg1, arg2):
     """
@@ -201,6 +204,7 @@ def build_docs_func(func_info):
         func_doc_arr = func_info["docstring"].split("\n\n")
         func_doc_arr = [val.strip() for val in func_doc_arr]
 
+        # TODO: Handle 2nd line of descriptions
         out_str = "{}{}\n".format(out_str, func_doc_arr[0])
 
         # TODO: Use napoleon aliases for this
