@@ -12,6 +12,8 @@ IGNORE_FOLDERS = ["__pycache__", "ignore_dir", ".git", "env", ".vscode"]
 ARGUMENT_ALIASES = ["Args:", "Arguments:"]
 RETURNS_ALIASES = ["Returns:"]
 EXCEPTION_ALIASES = ["Raises:"]
+ALL_ALIASES = ARGUMENT_ALIASES + RETURNS_ALIASES + EXCEPTION_ALIASES
+
 
 def test_func(arg1, arg2):
     """
@@ -224,14 +226,19 @@ def build_docs_func(func_info):
         func_doc_arr = func_info["docstring"].split("\n\n")
         func_doc_arr = [val.strip() for val in func_doc_arr]
 
-        # TODO: Handle 2nd line of descriptions
-        out_str = "{}{}\n".format(out_str, func_doc_arr[0])
-
-        # TODO: Use napoleon aliases for this
         arg_str = [docstr for docstr in func_doc_arr if arr_startswith(docstr, ARGUMENT_ALIASES)]
         ret_str = [docstr for docstr in func_doc_arr if arr_startswith(docstr, RETURNS_ALIASES)]
         exc_str = [docstr for docstr in func_doc_arr if arr_startswith(docstr, EXCEPTION_ALIASES)]
+        other_str = [docstr for docstr in func_doc_arr if not arr_startswith(docstr, ALL_ALIASES)]
 
+        # Build function description 
+        if other_str:
+            out_str = "{}{}".format(out_str, other_str[0])
+            other_str = [val.replace("\n", " ") for val in other_str]
+            if len(other_str) > 1:
+                out_str = "{}\nDescription: {}\n".format(out_str, "\n".join(other_str[1:]))
+
+        # Build documentation for Arguments
         out_str = "{}#### Arguments:".format(out_str)
         if arg_str:
             arg_str = arg_str[0]
@@ -255,6 +262,7 @@ def build_docs_func(func_info):
         else:
             out_str = "{}\n_None_\n".format(out_str)
 
+        # Build documentation for Returns
         out_str = "{}#### Returns:\n".format(out_str)
         if ret_str:
             ret_str = ret_str[0].replace("Returns:\n","").strip()
