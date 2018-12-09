@@ -208,21 +208,28 @@ def build_docs_func(func_info):
         ret_str = [docstr for docstr in func_doc_arr if docstr.startswith("Returns:")]
         exc_str = [docstr for docstr in func_doc_arr if docstr.startswith("Raises:")]
 
-        out_str = "{}#### Arguments:\n".format(out_str)
+        out_str = "{}#### Arguments:".format(out_str)
         if arg_str:
             arg_str = arg_str[0]
             args = [val.strip() for val in arg_str.split("\n")[1:]]
             for arg in args:
-                # TODO: Handle multiline docstrings
-                name, type_, descr = re.search("(.+) \((.+)\): (.+)", arg).groups()
-                out_str = "{out_str}- {name}\n  - Type: {type}\n  - {descr}\n".format(
-                    out_str=out_str,
-                    name=name,
-                    type=type_,
-                    descr=descr
-                )
+                matching = re.search("(.+) \((.+)\): (.+)", arg)
+                if matching is not None:
+                    name, type_, descr = matching.groups()
+                    out_str = "{out_str}\n- {name}\n  - Type: {type}\n  - {descr}".format(
+                        out_str=out_str,
+                        name=name,
+                        type=type_,
+                        descr=descr.strip()
+                    )
+                else:
+                    out_str = "{out_str} {descr_cont}".format(
+                        out_str=out_str,
+                        descr_cont=arg.strip()
+                    )
+            out_str = "{}\n".format(out_str)
         else:
-            out_str = "{}_None_\n".format(out_str)
+            out_str = "{}\n_None_\n".format(out_str)
 
         out_str = "{}#### Returns:\n".format(out_str)
         if ret_str:
