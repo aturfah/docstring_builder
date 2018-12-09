@@ -10,6 +10,25 @@ import re
 IGNORE_FOLDERS = ["__pycache__", "ignore_dir", ".git", "env", ".vscode"]
 
 
+def test_func(arg1, arg2):
+    """
+    Test function for documentation.
+
+    Here is a more detailed description of the function and
+    what it does.
+
+    Args:
+        arg1 (type1): Description of arg1.
+        arg2 (type2): Description of arg2 that spans multiple lines
+            like the so.
+
+    Returns:
+        Description of what this returns.
+
+    """
+    pass
+
+
 def parse_folder(folder_name):
     """
     Build documentation for the folder.
