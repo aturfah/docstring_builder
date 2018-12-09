@@ -9,7 +9,7 @@ import re
 
 IGNORE_FOLDERS = ["__pycache__", "ignore_dir", ".git", "env", ".vscode"]
 
-ARGUMENT_ALIASES = ["Args:"]
+ARGUMENT_ALIASES = ["Args:", "Arguments:"]
 RETURNS_ALIASES = ["Returns:"]
 EXCEPTION_ALIASES = ["Raises:"]
 
@@ -190,6 +190,26 @@ def build_files(file_info):
     raise RuntimeError("DOOT PARSE FOLDERS")
 
 
+def arr_startswith(input_str, match_arr):
+    """
+    Test if string starts with any member of array.
+
+
+    Arguments:
+        input_str (str): String to check against.
+        match_arr (list): List of items to check for.
+
+    Returns:
+        True if input_str starts with amy member of match_arr
+
+    """
+    for item in match_arr:
+        if input_str.startswith(item):
+            return True
+
+    return False
+
+
 def build_docs_func(func_info):
     """
     Build documentation for a function.
@@ -208,9 +228,9 @@ def build_docs_func(func_info):
         out_str = "{}{}\n".format(out_str, func_doc_arr[0])
 
         # TODO: Use napoleon aliases for this
-        arg_str = [docstr for docstr in func_doc_arr if docstr.startswith("Args:")]
-        ret_str = [docstr for docstr in func_doc_arr if docstr.startswith("Returns:")]
-        exc_str = [docstr for docstr in func_doc_arr if docstr.startswith("Raises:")]
+        arg_str = [docstr for docstr in func_doc_arr if arr_startswith(docstr, ARGUMENT_ALIASES)]
+        ret_str = [docstr for docstr in func_doc_arr if arr_startswith(docstr, RETURNS_ALIASES)]
+        exc_str = [docstr for docstr in func_doc_arr if arr_startswith(docstr, EXCEPTION_ALIASES)]
 
         out_str = "{}#### Arguments:".format(out_str)
         if arg_str:
