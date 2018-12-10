@@ -47,7 +47,7 @@ def parse_folder(folder_name):
 
     """
     output = {}
-    output["name"] = folder_name.replace("\\", "/")
+    output["name"] = folder_name
     output["type"] = "folder"
 
     # Get list of folders to build documentation for
@@ -216,10 +216,14 @@ def build_files(file_info, base_path):
             build_files(datum, file_info["name"])
 
             # Add Subdir links
+            subdir_link = join(datum["name"].replace(base_path, ""), OUTPUT_FILENAME)
+            if subdir_link.startswith("\\"):
+                subdir_link = subdir_link[1:]
+
             output_str = "{output_str}- [{folder_name}]({link})\n".format(
                 output_str=output_str,
                 folder_name=datum["name"].replace(base_path, ""),
-                link=join(datum["name"].replace(base_path, ""), OUTPUT_FILENAME)
+                link=subdir_link
             )
 
     with open(join(file_info["name"], OUTPUT_FILENAME), 'w') as out_file:
