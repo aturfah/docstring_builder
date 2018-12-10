@@ -216,7 +216,7 @@ def build_files(file_info, base_path):
             build_files(datum, file_info["name"])
 
             # Add Subdir links
-            subdir_link = join(datum["name"].replace(base_path, ""), OUTPUT_FILENAME).replace("\\", "/")
+            subdir_link = join(datum["name"].replace(file_info["name"], ""), OUTPUT_FILENAME).replace("\\", "/")
             if subdir_link.startswith("/"):
                 subdir_link = subdir_link[1:]
 
