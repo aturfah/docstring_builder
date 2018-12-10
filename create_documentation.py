@@ -208,12 +208,19 @@ def build_files(file_info, base_path):
         for class_child in datum["class_children"]:
             output_str = "{}{}".format(output_str, build_docs_class(class_child))
 
-    for folder_name in file_info["_folders"]:
-        # Create documentation for files in folder
-        datum = file_info[folder_name]
-        build_files(datum, file_info["name"])
+    if file_info["_folders"]:
+        output_str = "{}## Subdirectory Links:\n".format(output_str)
+        for folder_name in file_info["_folders"]:
+            # Create documentation for files in folder
+            datum = file_info[folder_name]
+            build_files(datum, file_info["name"])
 
-        # TODO: Add link to subdirectories' documentation files.
+            # Add Subdir links
+            output_str = "{output_str}- [{folder_name}]({link})\n".format(
+                output_str=output_str,
+                folder_name=datum["name"].replace(base_path, ""),
+                link=join(datum["name"].replace(base_path, ""), OUTPUT_FILENAME)
+            )
 
     with open(join(file_info["name"], OUTPUT_FILENAME), 'w') as out_file:
         out_file.write(output_str)
