@@ -170,7 +170,7 @@ def parse_func(func_node):
     return output
 
 
-def build_files(file_info):
+def build_files(file_info, base_path):
     """
     Actually build the documentation.
     
@@ -178,8 +178,13 @@ def build_files(file_info):
         file_info (dict): All the directory info from earlier steps.
 
     """
-    output_str = ""
+    # Build header
+    module_name = file_info["name"].replace(base_path, "")
+    if "\\" in module_name:
+        module_name = module_name.replace("\\", "")
+    output_str = "# Module: `{}`\n".format(module_name)
 
+    # Make sure that the __init__.py is at the front
     try:
         init_ind = file_info["_files"].index("__init__.py")
         del file_info["_files"][init_ind]
@@ -203,13 +208,13 @@ def build_files(file_info):
 
     for folder_name in file_info["_folders"]:
         # Create documentation for files in folder
-        output_str = "{}# Module: `{}`\n".format(output_str, folder_name)
         datum = file_info[folder_name]
-        output_str = "{}{}".format(output_str, build_files(datum))
+        build_files(datum, file_info["name"])
 
     with open(join(file_info["name"], OUTPUT_FILENAME), 'w') as out_file:
         out_file.write(output_str)
 
+    output_str = ""
     return output_str
 
 
@@ -323,7 +328,7 @@ def create_documentation():
 
     # Get the documentation for this (and all sub) directories
     file_info = parse_folder(current_dir)
-    print(build_files(file_info))
+    print(build_files(file_info, current_dir))
 
 
 if __name__ == "__main__":
