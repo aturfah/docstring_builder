@@ -176,20 +176,31 @@ def build_files(file_info):
     """
     output_str = ""
 
+    try:
+        init_ind = file_info["_files"].index("__init__.py")
+        del file_info["_files"][init_ind]
+        file_info["_files"] = ["__init__.py"] + file_info["_files"]
+    except ValueError:
+        pass
+
     for file_name in file_info["_files"]:
         # Document files in the folder
         datum = file_info[file_name]
 
-        output_str = "{}# {}: {}\n".format(output_str, datum["type"] , file_name)
+        output_str = "{}## File: `{}`\n".format(output_str, file_name)
         if datum["docstring"]:
             output_str = "{}{}\n".format(output_str, datum["docstring"])
 
         for func_child in datum["func_children"]:
             output_str = "{}{}".format(output_str, build_docs_func(func_child))
 
-    print(output_str)
+    for folder_name in file_info["_folders"]:
+        # Create documentation for files in folder
+        output_str = "{}# Module: `{}`\n".format(output_str, folder_name)
+        datum = file_info[folder_name]
+        output_str = "{}{}".format(output_str, build_files(datum))
 
-    raise RuntimeError("DOOT PARSE FOLDERS")
+    return output_str
 
 
 def arr_startswith(input_str, match_arr):
@@ -220,7 +231,7 @@ def build_docs_func(func_info):
         func_info (dict): Information about this function.
 
     """
-    out_str = "## Function: {}\n".format(func_info["name"])
+    out_str = "### Function: `{}`\n".format(func_info["name"])
 
     if func_info.get("docstring") and func_info["docstring"]:
         func_doc_arr = func_info["docstring"].split("\n\n")
@@ -233,10 +244,10 @@ def build_docs_func(func_info):
 
         # Build function description 
         if other_str:
-            out_str = "{}{}".format(out_str, other_str[0])
+            out_str = "{}{}\n".format(out_str, other_str[0])
             other_str = [val.replace("\n", " ") for val in other_str]
             if len(other_str) > 1:
-                out_str = "{}\nDescription: {}\n".format(out_str, "\n".join(other_str[1:]))
+                out_str = "{}\n#### Description\n{}\n".format(out_str, " ".join(other_str[1:]))
 
         # Build documentation for Arguments
         out_str = "{}#### Arguments:".format(out_str)
@@ -282,7 +293,7 @@ def create_documentation():
 
     # Get the documentation for this (and all sub) directories
     file_info = parse_folder(current_dir)
-    build_files(file_info)
+    print(build_files(file_info))
 
 
 if __name__ == "__main__":
