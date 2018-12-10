@@ -163,6 +163,9 @@ def parse_func(func_node):
     output["type"] = "func"
     output["docstring"] = ast.get_docstring(func_node)
 
+    output["docstring"] = output["docstring"].replace("<", "\<")
+    output["docstring"] = output["docstring"].replace(">", "\>")
+
     return output
 
 
