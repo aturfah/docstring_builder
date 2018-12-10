@@ -108,6 +108,6 @@ _None_
 _None_
 
 ## Subdirectory Links:
-- [\dir1](\dir1\DOCUMENTATION.md)
-- [\dir2](\dir2\DOCUMENTATION.md)
-- [\dir3](\dir3\DOCUMENTATION.md)
+- [\dir1](dir1\DOCUMENTATION.md)
+- [\dir2](dir2\DOCUMENTATION.md)
+- [\dir3](dir3\DOCUMENTATION.md)
