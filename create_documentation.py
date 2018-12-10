@@ -14,6 +14,7 @@ RETURNS_ALIASES = ["Returns:"]
 EXCEPTION_ALIASES = ["Raises:"]
 ALL_ALIASES = ARGUMENT_ALIASES + RETURNS_ALIASES + EXCEPTION_ALIASES
 
+OUTPUT_FILENAME = "DOCUMENTATION.md"
 
 def test_func(arg1, arg2):
     """
@@ -205,6 +206,9 @@ def build_files(file_info):
         output_str = "{}# Module: `{}`\n".format(output_str, folder_name)
         datum = file_info[folder_name]
         output_str = "{}{}".format(output_str, build_files(datum))
+
+    with open(join(file_info["name"], OUTPUT_FILENAME), 'w') as out_file:
+        out_file.write(output_str)
 
     return output_str
 
