@@ -213,6 +213,8 @@ def build_files(file_info, base_path):
         datum = file_info[folder_name]
         build_files(datum, file_info["name"])
 
+        # TODO: Add link to subdirectories' documentation files.
+
     with open(join(file_info["name"], OUTPUT_FILENAME), 'w') as out_file:
         out_file.write(output_str)
 
