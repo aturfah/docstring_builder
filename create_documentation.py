@@ -47,7 +47,7 @@ def parse_folder(folder_name):
 
     """
     output = {}
-    output["name"] = folder_name
+    output["name"] = folder_name.replace("\\", "/")
     output["type"] = "folder"
 
     # Get list of folders to build documentation for
