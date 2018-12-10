@@ -191,6 +191,9 @@ def build_files(file_info):
         if datum["docstring"]:
             output_str = "{}{}\n".format(output_str, datum["docstring"])
 
+        for class_child in datum["class_children"]:
+            output_str = "{}{}".format(output_str, build_docs_class(class_child))
+
         for func_child in datum["func_children"]:
             output_str = "{}{}".format(output_str, build_docs_func(func_child))
 
@@ -285,6 +288,17 @@ def build_docs_func(func_info):
 
     out_str = "{}\n".format(out_str)
     return out_str
+
+
+def build_docs_class(class_info):
+    """
+    Build documentation for a class.
+    
+    Args:
+        class_info (dict): Information about this class.
+
+    """
+    return ""
 
 
 def create_documentation():
