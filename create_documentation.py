@@ -182,6 +182,8 @@ def build_files(file_info, base_path):
     module_name = file_info["name"].replace(base_path, "")
     if "\\" in module_name:
         module_name = module_name.replace("\\", "")
+    if not module_name:
+        module_name = "Base Directory"
     output_str = "# Module: `{}`\n".format(module_name)
 
     # Make sure that the __init__.py is at the front
@@ -213,9 +215,6 @@ def build_files(file_info, base_path):
 
     with open(join(file_info["name"], OUTPUT_FILENAME), 'w') as out_file:
         out_file.write(output_str)
-
-    output_str = ""
-    return output_str
 
 
 def arr_startswith(input_str, match_arr):
@@ -328,7 +327,7 @@ def create_documentation():
 
     # Get the documentation for this (and all sub) directories
     file_info = parse_folder(current_dir)
-    print(build_files(file_info, current_dir))
+    build_files(file_info, current_dir)
 
 
 if __name__ == "__main__":
