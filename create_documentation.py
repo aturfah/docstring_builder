@@ -230,7 +230,6 @@ def arr_startswith(input_str, match_arr):
     """
     Test if string starts with any member of array.
 
-
     Arguments:
         input_str (str): String to check against.
         match_arr (list): List of items to check for.
